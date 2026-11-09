@@ -1,28 +1,31 @@
-# 범위와 수용 기준
+# Scope and acceptance criteria
 
-## 요청 범위
+**English** | [한국어](ko/REQUIREMENTS.md) | [Project README](../README.md)
 
-- 서로 다른 Web package ID를 사용하는 Tizen Web 샘플 앱 두 개.
-- Writer는 새 문자열 항목 저장, 동일 앱 읽기, 별도 Reader 또는 설정된 제품 Native package에 `READ`/`NONE` 권한 설정을 수행.
-- Reader는 Writer package가 소유한 항목을 명시적 owner-qualified 조회로 읽기.
-- 저장 키는 `tcstring`, 공개 시험값은 `sample_tcstring_value`다. set은 Writer 웹앱이 수행하고 Reader 웹앱과 C++ Native 예제는 get만 수행한다.
-- 기존 Native 코드의 C++ 읽기 통합 예제를 두 Web 앱과 분리해 제공.
-- 자동 unsigned WGT 빌드와 서명 가능한 Tizen CLI 절차, 공개 사용 가이드 포함.
+## Requested scope
 
-## 기대 조건
+- Two Tizen web sample apps with different package IDs.
+- Writer creates a new string item, gets its own value, and grants or revokes `READ` access for the separate Reader package or an explicitly configured product native package.
+- Reader gets an item owned by Writer by using an owner-qualified query.
+- The sample key is `tcstring`, and the public test value is `sample_tcstring_value`. Only the Writer web app sets it. The Reader web app and native C++ example only get it.
+- A C++ get example for integration into an existing native app, kept separate from the two web apps.
+- An automated unsigned WGT build, instructions for signing with the Tizen CLI, and a public usage guide.
+- English is the default documentation language at the canonical paths in the repository. Korean translations live under `docs/ko/` and the corresponding `*.ko.md` files, with links in both directions.
 
-1. Web apps가 독립 package/app ID, Tizen 3.0 minimum과 Samsung TV profile로 구성된다.
-2. 화면/API 부재 또는 읽기/권한 실패를 감추지 않으며 저장 문자열을 로그에 출력하지 않는다.
-3. 기존 key를 같은 값 또는 새 값으로 덮어쓰지 않는다. ACL만 실패하면 ACL만 재시도한다.
-4. WGT build는 XML, 엔트리 목록, CRC와 package ID를 검사하고 두 파일 및 해시를 출력한다.
-5. unsigned package와 인증서로 서명한 설치 후보를 출력 위치와 문서에서 구분한다.
-6. Native 코드는 owner package ID 조회, 입력 검사, 버퍼 해제와 비밀값 로그 제한을 구현한다.
-7. README/상세 가이드는 KeyManager 문서 간 지원 상충과 Native TV 지원 범위를 설명한다.
-8. 빌드와 테스트 결과는 기기 테스트 완료와 혼동되지 않는다.
+## Acceptance criteria
 
-## 환경 제약과 미해결 확인
+1. Each web app has its own package/application ID, the Tizen 3.0 minimum, and the Samsung TV profile.
+2. The UI and API report missing support, read failures, and permission failures rather than hiding them. The stored string is not logged.
+3. An existing key is never overwritten. If an ACL step fails, retry the ACL without saving again.
+4. The WGT build checks its XML, entries, CRC, package IDs, and configuration, then produces two files and a hash manifest.
+5. Unsigned review packages and certificate-signed installation candidates are clearly distinguished by output path and documentation.
+6. The native example reads with the writer owner package ID, validates inputs, releases API buffers, and does not log private values.
+7. README and detailed guides explain the conflicting KeyManager availability guidance and native TV support boundary.
+8. Build/test results are never presented as physical-device test results.
 
-- 삼성 일반 공개 TV 앱 경로는 Web WGT입니다. 공개 FAQ는 Native TPK 설치를 지원하지 않는다고 명시합니다. Native는 제품용 SDK/런타임이 별도로 제공될 때 통합할 참고 코드입니다.
-- 공식 KeyManager API 레퍼런스와 Seller Office 출시 점검의 제공 여부 안내는 문맥이 서로 다릅니다. 해당 TV 모델·firmware에서 API와 ACL을 시험해야 합니다.
-- 로컬 작성 시 Tizen Studio CLI와 TV certificate가 확인되지 않았습니다. 실제 CLI compile, WGT signing, device installation, Web/Web 및 Web/Native 교차 읽기는 검증 대기입니다.
-- Web API가 런타임에서 활성화되지 않는 경우 평문 저장소로 fallback하지 않습니다.
+## Environment limits and unresolved checks
+
+- Samsung's public regular TV app path uses Web WGTs. Its public FAQ says Native TPK installation is unsupported in its regular TV testing flow. The native code is a reference for a product that separately has a suitable SDK/runtime.
+- Samsung's KeyManager API reference and Seller Office launch checklist differ in the context of their availability guidance. Check API and ACL behavior on the actual TV model and firmware.
+- Tizen Studio CLI and a TV certificate were not available when this project was prepared. SDK compilation, WGT signing, device installation, Web-to-Web get, and Web-to-native get remain unverified.
+- If the API is not active in a runtime, the samples must not fall back to plaintext storage.

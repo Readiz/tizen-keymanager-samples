@@ -1,47 +1,49 @@
-# 테스트 기록과 기기 시험
+# Test record and device test plan
 
-## 자동 검사
+**English** | [한국어](ko/TESTING.md) | [Project README](../README.md)
 
-자동 테스트는 Web API 순서를 모사하는 단위 검사, 두 WGT의 ZIP/XML/package 검증, 해시 확인을 대상으로 합니다. 가짜 Tizen API는 test runner 안에서만 쓰며 실제 TV API 성공 증거로 해석하지 않습니다.
+## Automated checks
+
+Automated tests simulate the web API sequence, inspect the two WGT ZIP/XML manifests and package IDs, and check hashes. Fake Tizen APIs run only inside the test runner; they do not demonstrate success on a TV.
 
 ```sh
 npm test
 npm run build
 ```
 
-## 2026-11-09 로컬 확인 결과
+## Local checks recorded on 2026-11-09
 
-환경은 macOS, Node.js 26.13.0, Python 3.9.6, Apple Clang의 `c++`입니다. 저장 키는 `tcstring`, 공개 시험 문자열은 `sample_tcstring_value`입니다.
+The recorded environment was macOS, Node.js 26.13.0, Python 3.9.6, and Apple Clang `c++`. The sample key is `tcstring`; its public test value is `sample_tcstring_value`.
 
-| 검사 | 실제 결과 | 확인 범위 |
+| Check | Recorded result | Scope |
 | --- | --- | --- |
-| `npm test` — Node | 12/12 통과 | 소유자 지정 get, 신규 set의 기존 항목 보호, READ/NONE, 부분 성공·ACL 재시도, 중복 콜백, 해제 실패 UI |
-| `npm test` — Python | 4/4 통과 | WGT 구조·ID·반복 패키징 해시와 C++ 호스트 모의 검사 |
-| C++ 호스트 검사 | 컴파일·실행 통과 | CKMC를 테스트 대역으로 바꾼 get, NUL 종료 없는 바이트 복사, 빈 값, 오류·버퍼 해제, 원문 대신 비교 결과 출력 |
-| `npm run build` | 미서명 WGT 2개 생성 | 각 8개 엔트리, CRC/XML, Tizen 3.0·Samsung TV profile, package/app ID 및 내장 tcstring 설정 대조 |
-| ES5 문법 검사 | 웹 JS 4개 파일 통과 | Acorn의 ECMAScript 5 파싱. TV 엔진 실행 시험은 아님 |
-| Chrome 화면 검사 | 두 앱 × 1920/1280/768/390px 통과 | 가로 넘침 없음, 버튼 높이 44px, `tcstring` 표시, API 없음 상태 |
-| Chrome 키보드 검사 | 방향키 4방향·Enter·Back 취소 확인 | 초기 포커스, 삭제 확인 취소와 포커스 복귀. Back 10009는 합성 이벤트 |
-| SDK 서명 빌드 | 미검증 | Tizen CLI가 없어 안내 오류로 중단. 서명본 생성·실제 인증서 사용 없음 |
+| `npm test` — Node | 12/12 passed | Owner-qualified get, protection of existing keys, READ/NONE, partial success and ACL retry, duplicate callbacks, and revocation-failure UI |
+| `npm test` — Python | 4/4 passed | WGT structure and IDs, repeat package hash, and C++ host mock |
+| C++ host check | Compiled and ran successfully | CKMC test double; get, size-based byte copy without NUL termination, empty value, errors and buffer cleanup, comparison output rather than raw value |
+| `npm run build` | Produced two unsigned WGTs | Eight entries each; CRC/XML, Tizen 3.0, Samsung TV profile, IDs, and packaged `tcstring` configuration |
+| ES5 syntax check | 4 web JS files passed | Parsed as ECMAScript 5 by Acorn. This did not run on a TV engine. |
+| Chrome screen check | Both apps at 1920/1280/768/390 px | No horizontal overflow, 44 px buttons, `tcstring` visible, unavailable API state |
+| Chrome keyboard check | Four arrows, Enter, and Back-cancel checked | Initial focus, cancel from delete confirmation and focus return. Back key code 10009 was a synthetic event. |
+| SDK signed build | Not verified | The Tizen CLI was unavailable and the command reported this. No signed WGT or certificate use was produced. |
 
-브라우저에서는 실제 `tizen.keymanager`를 사용할 수 없어 지원하지 않는 상태를 확인했습니다. Node의 Tizen 대역과 C++의 CKMC 대역은 테스트 내부에서만 사용합니다. 이 결과는 실제 TV의 set/get·패키지 간 READ 정책, TV 설치, 재실행·재부팅 후 유지 또는 제품 Native SDK 빌드 성공을 증명하지 않습니다.
+The browser did not expose the real `tizen.keymanager` API, so the unsupported state was checked. The Node Tizen fixture and C++ CKMC double only run in tests. These results do not prove set/get on a physical TV, cross-package `READ` behavior, TV installation, persistence across app or TV restarts, or compilation with a product native SDK.
 
-## 실기기 기록 양식
+## Physical-device test record template
 
-각 조합별로 기록을 추가합니다. account, 인증서 개인 키, 실제 secret value를 저장하지 마세요.
+Add a row for each tested device/SDK combination. Do not record accounts, certificate private keys, or the actual secret value.
 
-| 필드 | 값 |
+| Field | Value |
 | --- | --- |
-| TV 모델 및 출시 연도 | |
-| TV 펌웨어/OS | |
-| Tizen/Samsung SDK 버전 | |
-| 보안 프로필 유형/이름(비밀 제외) | |
-| Web package ID/앱 ID | |
-| Native package ID 및 런타임(해당 시) | |
-| 시험 날짜·시간대 | |
-| 시험 ID (GUIDE T01–T13)와 단계 | |
-| 실제 결과와 error.name/CKMC 반환 코드 | |
-| 비밀값 원문을 로그에 남기지 않았음 | |
-| 남은 제한 / 후속 시도 | |
+| TV model and release year | |
+| TV firmware/OS | |
+| Tizen/Samsung SDK version | |
+| Security profile type/name (no secrets) | |
+| Web package/application IDs | |
+| Native package ID and runtime, if applicable | |
+| Test date and timezone | |
+| Test IDs (T01–T13) and steps | |
+| Actual result and error name/CKMC result code | |
+| Confirm the secret value was not logged | |
+| Limitations and follow-up | |
 
-별도 Web app 조회 시험을 실제로 수행하지 않았다면 테스트 표의 API fixture, WGT 구조 검사 및 일반 TV 실기 결과를 구분해서 보고합니다.
+If separate Web app access was not tested on hardware, distinguish API fixtures and WGT structure checks from a physical TV result.
