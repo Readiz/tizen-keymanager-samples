@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KeyManager Writer</title>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/sample-config.js"></script>
+    <script src="js/keymanager.js"></script>
+    <script src="js/remote.js"></script>
+    <script defer src="js/app.js"></script>
+</head>
+<body>
+<main>
+    <header><h1>TCString · Writer</h1><span class="subtle">Tizen TV · Web App</span></header>
+    <p class="hint">시험용 문자열을 KeyManager에 새 항목으로 저장하고 다른 앱에 읽기 권한을 부여합니다.</p>
+    <section class="panel" aria-labelledby="data-title">
+        <h2 id="data-title">시험 항목</h2>
+        <dl class="facts">
+            <dt>저장 항목</dt><dd id="sample-key"></dd>
+            <dt>시험 문자열</dt><dd>sample_tcstring_value · 공개 테스트값</dd>
+            <dt>Writer package</dt><dd id="writer-package"></dd>
+            <dt>Reader package</dt><dd id="reader-package"></dd>
+            <dt>Native 대상</dt><dd id="native-package"></dd>
+        </dl>
+        <div class="actions">
+            <button class="primary" id="save" type="button">tcstring 저장(set) + READ</button>
+            <button id="read-owner" type="button">Writer에서 읽기(get)</button>
+            <button id="retry" type="button">READ 다시 부여</button>
+            <button id="revoke" type="button">공유 해제</button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite" hidden></p>
+    </section>
+    <section class="panel">
+        <h2>데모 키 정리</h2>
+        <p class="hint">확인한 경우 이 샘플이 소유한 tcstring만 삭제합니다. 시작할 때는 자동으로 삭제하지 않습니다.</p>
+        <div class="actions"><button class="danger" id="show-delete" type="button">삭제 단계 열기</button></div>
+        <div class="confirm-box" id="confirm-box" hidden>
+            <p>tcstring 항목을 삭제할까요? 이 작업 뒤 다시 시험하려면 새 항목 저장을 실행하세요.</p>
+            <div class="actions">
+                <button class="danger" id="confirm-delete" type="button">tcstring 삭제</button>
+                <button id="cancel-delete" data-back="true" type="button">취소</button>
+            </div>
+        </div>
+    </section>
+    <details><summary>저장 순서와 오류 안내</summary>
+        <p>이 샘플은 먼저 같은 Writer 안에서 항목 존재 여부를 확인합니다. 항목이 있을 때는 덮어쓰지 않습니다. 신규 저장 뒤 Reader package에 READ를 주며, Native package는 설정했을 때만 대상에 추가됩니다. 권한 일부가 실패해도 저장된 값은 남고 실패한 권한만 다시 시도할 수 있습니다.</p>
+        <p>브라우저에서 열면 실제 KeyManager API를 사용할 수 없어 상태만 안내합니다. 웹 테스트용 저장소로 대신 동작하지 않습니다.</p>
+    </details>
+    <footer>샘플 문자열은 비밀이 아닙니다. 민감한 값은 이 화면의 로그나 일반 저장소로 보내지 마세요.</footer>
+</main>
+</body>
+</html>

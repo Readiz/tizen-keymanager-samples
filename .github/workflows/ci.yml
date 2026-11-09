@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Run tests
+        run: npm test
+      - name: Build unsigned WGTs
+        run: npm run build
+      - name: Upload unsigned package files
+        uses: actions/upload-artifact@v4
+        with:
+          name: tizen-keymanager-unsigned-wgt
+          path: |
+            dist/unsigned/*.wgt
+            dist/unsigned/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14

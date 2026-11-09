@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KeyManager Reader</title>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/sample-config.js"></script>
+    <script src="js/keymanager.js"></script>
+    <script src="js/remote.js"></script>
+    <script defer src="js/app.js"></script>
+</head>
+<body>
+<main>
+    <header><h1>TCString · Reader</h1><span class="subtle">별도 Tizen Web App</span></header>
+    <p class="hint">Writer가 소유한 시험 항목을 Reader package로 읽습니다.</p>
+    <section class="panel">
+        <h2>공유 항목</h2>
+        <dl class="facts">
+            <dt>Writer package</dt><dd id="writer-package"></dd>
+            <dt>Reader package</dt><dd id="reader-package"></dd>
+            <dt>저장 항목</dt><dd id="sample-key"></dd>
+        </dl>
+        <div class="actions"><button class="primary" id="read" type="button">tcstring 읽기(get)</button></div>
+        <p id="status" class="status" role="status" aria-live="polite" hidden></p>
+    </section>
+    <details><summary>읽기 조건</summary>
+        <p>Writer에서 신규 저장과 이 Reader package의 READ 설정을 마친 뒤 읽으세요. Native 앱 ID가 아니라 Writer의 package ID를 KeyManager 소유자로 지정합니다. 값 원문은 화면과 로그에 표시하지 않습니다.</p>
+        <p>브라우저에서 열면 실제 KeyManager API를 사용할 수 없어 상태만 안내합니다. 테스트용 저장소로 대신 동작하지 않습니다.</p>
+    </details>
+</main>
+</body>
+</html>

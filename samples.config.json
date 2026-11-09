@@ -1,0 +1,10 @@
+{
+  "writerPackageId": "KmWriter01",
+  "writerAppId": "KmWriter01.Writer",
+  "readerPackageId": "KmReader01",
+  "readerAppId": "KmReader01.Reader",
+  "nativePackageId": "",
+  "key": "tcstring",
+  "value": "sample_tcstring_value",
+  "version": "1.0.0"
+}
